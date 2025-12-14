@@ -6,9 +6,9 @@ import { BookGridComponent } from './components/book-grid/book-grid.component';
   selector: 'app-root',
   standalone: true,
   imports: [CommonModule, BookGridComponent],
-  template: `
-    <app-book-grid></app-book-grid>
-  `,
-  styles: []
+  templateUrl: './app.component.html',
+  styleUrl: './app.component.css'
 })
-export class AppComponent { }
+export class AppComponent {
+  title = 'LitLoop';
+}
