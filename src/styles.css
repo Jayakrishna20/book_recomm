@@ -1,15 +1,21 @@
 /* You can add global styles to this file, and also import other style files */
 body {
   margin: 0;
-  font-family: "Inter", system-ui, -apple-system, sans-serif;
-  background-color: #ffffff;
-  color: #1e293b;
+  font-family: var(--font-body);
+  background-color: #fafbfd; /* Very subtle off-white for royalty */
+  color: var(--color-royal-blue);
   height: 100vh;
   overflow: hidden;
 }
 
 :root {
   --primary: #6366f1;
+  --font-heading: "Playfair Display", serif;
+  --font-body: "Lato", sans-serif;
+  --color-royal-blue: #1e293b;
+  --color-gold: #d4af37;
+  --color-gold-light: #f3e5ab;
+  --color-dark: #0f172a;
 }
 
 * {

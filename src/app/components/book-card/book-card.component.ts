@@ -21,18 +21,20 @@ import { Book } from '../../models/book.model';
   styles: [`
     .book-card {
       background: white;
-      border-radius: 12px;
+      border-radius: 8px; /* Slightly sharper for elegance */
       overflow: hidden;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-      transition: transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 10px 30px -10px rgba(0,0,0,0.1);
+      transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
       height: 100%;
       display: flex;
       flex-direction: column;
+      border: 1px solid rgba(0,0,0,0.03);
     }
     
     .book-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+      transform: translateY(-8px);
+      box-shadow: 0 20px 40px -10px rgba(0,0,0,0.15);
+      border-color: var(--color-gold-light);
     }
     
     .image-container {
@@ -50,49 +52,61 @@ import { Book } from '../../models/book.model';
       width: 100%;
       height: 100%;
       object-fit: cover;
-      transition: transform 0.3s;
+      transition: transform 0.6s ease;
     }
     
     .book-card:hover img {
-      transform: scale(1.05);
+      transform: scale(1.03);
     }
     
     .genre-tag {
       position: absolute;
-      top: 10px;
-      right: 10px;
-      background: rgba(0,0,0,0.7);
-      color: white;
-      padding: 4px 8px;
-      border-radius: 16px;
-      font-size: 0.75rem;
-      font-weight: 500;
+      top: 12px;
+      right: 12px;
+      background: rgba(255, 255, 255, 0.95);
+      color: var(--color-royal-blue);
+      padding: 6px 12px;
+      border-radius: 2px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
       backdrop-filter: blur(4px);
+      border-bottom: 2px solid var(--color-gold);
     }
     
     .info {
-      padding: 1rem;
+      padding: 0.75rem; /* Reduced padding to make room for text on small cards */
       flex-grow: 1;
       display: flex;
       flex-direction: column;
+      text-align: center;
     }
     
     h3 {
-      font-size: 1.1rem;
-      margin: 0 0 0.5rem 0;
-      color: #333;
-      line-height: 1.4;
+      font-family: var(--font-heading);
+      font-size: 0.9rem; /* Slightly smaller */
+      margin: 0 0 0.25rem 0; /* Tighter margin */
+      color: var(--color-royal-blue);
+      line-height: 1.2;
       display: -webkit-box;
       -webkit-line-clamp: 2;
       -webkit-box-orient: vertical;
       overflow: hidden;
+      font-weight: 700;
+      height: 2.4em; /* Fixed height for 2 lines to prevent layout shift */
     }
     
     .author {
-      font-size: 0.9rem;
-      color: #666;
+      font-family: var(--font-body);
+      font-size: 0.7rem;
+      color: #94a3b8;
       margin: 0;
       margin-top: auto;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-weight: 400;
     }
   `]
 })
