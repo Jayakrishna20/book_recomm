@@ -39,44 +39,51 @@ import { Book } from '../../models/book.model';
     .container {
       max-width: 1200px;
       margin: 0 auto;
-      padding: 2rem;
-      min-height: 100vh;
+      padding: 1rem 2rem;
+      height: 100vh;
       display: flex;
       flex-direction: column;
+      overflow: hidden;
     }
     
     header {
       text-align: center;
-      margin-bottom: 3rem;
+      margin-bottom: 1rem;
+      flex-shrink: 0;
     }
     
     h1 {
-      font-size: 3rem;
+      font-size: 2.5rem;
       font-weight: 800;
       background: linear-gradient(135deg, #6366f1, #a855f7, #ec4899);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.25rem;
+      margin-top: 0.5rem;
     }
     
     p {
       color: #64748b;
-      font-size: 1.1rem;
+      font-size: 1rem;
+      margin: 0;
     }
     
     .grid-layout {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 2rem;
-      margin-bottom: 3rem;
+      grid-template-columns: repeat(4, 1fr); /* Force 4 columns */
+      gap: 1.5rem;
+      margin-bottom: 1rem;
       flex-grow: 1;
+      overflow: hidden;
+      align-content: center; /* Center grid content vertically */
     }
     
     .actions {
       display: flex;
       justify-content: center;
       margin-top: auto;
-      padding-bottom: 2rem;
+      padding-bottom: 3rem;
+      flex-shrink: 0;
     }
     
     button {

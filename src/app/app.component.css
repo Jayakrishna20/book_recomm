@@ -1,39 +1,4 @@
-.app-header {
-  display: flex;
-  align-items: center;
-  padding: 1rem 2rem;
-  background-color: #0f0f0f;
-  border-bottom: 2px solid #333;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-}
-
-.logo-container {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
-
-.app-logo {
-  height: 50px;
-  width: auto;
-  object-fit: contain;
-  filter: drop-shadow(0 0 5px rgba(255, 65, 248, 0.5));
-}
-
-.app-title {
-  font-family: "Inter", sans-serif;
-  font-size: 2rem;
-  font-weight: 800;
-  margin: 0;
-  background: linear-gradient(90deg, #ff41f8, #7702ff);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  letter-spacing: -1px;
-}
-
 main {
   padding: 2rem;
-  background-color: #121212;
-  min-height: calc(100vh - 84px); /* Rough height adjustment */
+  min-height: 100vh;
 }

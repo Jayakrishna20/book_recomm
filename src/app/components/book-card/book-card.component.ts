@@ -9,7 +9,7 @@ import { Book } from '../../models/book.model';
   template: `
     <div class="book-card">
       <div class="image-container">
-        <img [src]="book.thumbnailUrl || 'assets/placeholder-book.svg'" [alt]="book.title" loading="lazy">
+        <img [src]="book.thumbnailUrl || 'assets/placeholder-book.svg'" [alt]="book.title" loading="lazy" (error)="onImageError($event)">
         <div class="genre-tag">{{ book.genre }}</div>
       </div>
       <div class="info">
@@ -98,4 +98,8 @@ import { Book } from '../../models/book.model';
 })
 export class BookCardComponent {
   @Input({ required: true }) book!: Book;
+
+  onImageError(event: any) {
+    event.target.src = 'assets/placeholder-book.svg';
+  }
 }

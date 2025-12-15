@@ -2,8 +2,10 @@
 body {
   margin: 0;
   font-family: "Inter", system-ui, -apple-system, sans-serif;
-  background-color: #f8fafc;
+  background-color: #ffffff;
   color: #1e293b;
+  height: 100vh;
+  overflow: hidden;
 }
 
 :root {

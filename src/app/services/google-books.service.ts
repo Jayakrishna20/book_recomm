@@ -26,7 +26,7 @@ export class GoogleBooksService {
                 const items = response.items;
                 if (items && items.length > 0) {
                     const volumeInfo = items[0].volumeInfo;
-                    return volumeInfo.imageLinks?.thumbnail?.replace('http:', 'https:') as string;
+                    return volumeInfo.imageLinks?.thumbnail?.replace('http:', 'https:').replace('&zoom=1', '&zoom=2') as string;
                 }
                 return undefined;
             }),
