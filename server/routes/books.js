@@ -18,6 +18,7 @@ router.post("/", async (req, res) => {
     title: req.body.title,
     author: req.body.author,
     genre: req.body.genre,
+    thumbnailUrl: req.body.thumbnailUrl,
     externalId: req.body.externalId,
   });
 
@@ -58,6 +59,9 @@ router.put("/:id", async (req, res) => {
     }
     if (req.body.genre != null) {
       book.genre = req.body.genre;
+    }
+    if (req.body.thumbnailUrl != null) {
+      book.thumbnailUrl = req.body.thumbnailUrl;
     }
     if (req.body.externalId != null) {
       book.externalId = req.body.externalId;

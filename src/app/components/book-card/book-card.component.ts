@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Book } from '../../models/book.model';
 
@@ -11,6 +11,7 @@ import { Book } from '../../models/book.model';
       <div class="image-container">
         <img [src]="book.thumbnailUrl || 'assets/placeholder-book.svg'" [alt]="book.title" loading="lazy" (error)="onImageError($event)">
         <div class="genre-tag">{{ book.genre }}</div>
+        <button class="delete-btn" (click)="onDelete($event)" title="Remove from Library">×</button>
       </div>
       <div class="info">
         <h3>{{ book.title }}</h3>
@@ -57,6 +58,8 @@ import { Book } from '../../models/book.model';
     
     .book-card:hover img {
       transform: scale(1.03);
+      opacity: 0.3; /* Dim the image */
+      filter: blur(2px); /* Optional: blur for focus on button */
     }
     
     .genre-tag {
@@ -74,6 +77,48 @@ import { Book } from '../../models/book.model';
       box-shadow: 0 4px 10px rgba(0,0,0,0.1);
       backdrop-filter: blur(4px);
       border-bottom: 2px solid var(--color-gold);
+      transition: opacity 0.3s;
+    }
+
+    .book-card:hover .genre-tag {
+        opacity: 0; /* Hide genre tag on hover to reduce clutter */
+    }
+
+    .delete-btn {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0.5); /* Start small and centered */
+      width: 40px; /* Reduced from 48px */
+      height: 40px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.9);
+      color: #ef4444;
+      border: 1px solid rgba(239, 68, 68, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.8rem;
+      line-height: 1;
+      cursor: pointer;
+      opacity: 0;
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      z-index: 10;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      backdrop-filter: blur(4px);
+    }
+
+    .image-container:hover .delete-btn {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1); /* Scale up to normal */
+    }
+
+    .delete-btn:hover {
+      background: #ef4444;
+      color: white;
+      transform: scale(1.1) rotate(90deg);
+      box-shadow: 0 6px 16px rgba(239, 68, 68, 0.3);
+      border-color: #ef4444;
     }
     
     .info {
@@ -86,7 +131,7 @@ import { Book } from '../../models/book.model';
     
     h3 {
       font-family: var(--font-heading);
-      font-size: 0.9rem; /* Slightly smaller */
+      font-size: 0.8rem; /* Reduced from 0.9rem */
       margin: 0 0 0.25rem 0; /* Tighter margin */
       color: var(--color-royal-blue);
       line-height: 1.2;
@@ -95,23 +140,31 @@ import { Book } from '../../models/book.model';
       -webkit-box-orient: vertical;
       overflow: hidden;
       font-weight: 700;
-      height: 2.4em; /* Fixed height for 2 lines to prevent layout shift */
+      height: 2.2em; /* Reduced height */
     }
     
     .author {
       font-family: var(--font-body);
-      font-size: 0.7rem;
+      font-size: 0.65rem; /* Reduced from 0.7rem */
       color: #94a3b8;
       margin: 0;
       margin-top: auto;
       text-transform: uppercase;
-      letter-spacing: 1px;
+      letter-spacing: 0.5px;
       font-weight: 400;
     }
   `]
 })
 export class BookCardComponent {
   @Input({ required: true }) book!: Book;
+  @Output() delete = new EventEmitter<string>();
+
+  onDelete(event: Event) {
+    event.stopPropagation();
+    if (confirm(`Are you sure you want to remove "${this.book.title}"?`)) {
+      this.delete.emit(this.book.id);
+    }
+  }
 
   onImageError(event: any) {
     event.target.src = 'assets/placeholder-book.svg';

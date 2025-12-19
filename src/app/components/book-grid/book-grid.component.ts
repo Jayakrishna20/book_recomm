@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BookCardComponent } from '../book-card/book-card.component';
-import { CsvService } from '../../services/csv.service';
+import { BookService } from '../../services/book.service';
 import { RecommendationService } from '../../services/recommendation.service';
 import { GoogleBooksService } from '../../services/google-books.service';
 import { Book } from '../../models/book.model';
@@ -18,7 +18,7 @@ import { Book } from '../../models/book.model';
       </header>
       
       <div class="grid-layout" *ngIf="currentRecommendations.length > 0; else loading">
-        <app-book-card *ngFor="let book of currentRecommendations; trackBy: trackByBookId" [book]="book"></app-book-card>
+        <app-book-card *ngFor="let book of currentRecommendations; trackBy: trackByBookId" [book]="book" (delete)="onDeleteBook($event)"></app-book-card>
       </div>
       
       <ng-template #loading>
@@ -40,9 +40,11 @@ import { Book } from '../../models/book.model';
       max-width: 1400px; /* Wider for cleaner look */
       margin: 0 auto;
       padding: 1.5rem 2rem;
-      height: 100vh;
+      min-height: 100vh; /* Use min-height instead of height */
       display: flex;
       flex-direction: column;
+      justify-content: center; /* Center vertically */
+      align-items: center; /* Center horizontally */
       overflow: hidden;
     }
     
@@ -54,10 +56,10 @@ import { Book } from '../../models/book.model';
     
     h1 {
       font-family: var(--font-heading);
-      font-size: 2.25rem; /* Further reduced from 2.5rem */
+      font-size: 1.75rem; /* Reduced from 2.25rem */
       font-weight: 700;
       color: var(--color-royal-blue);
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.25rem;
       margin-top: 0;
       letter-spacing: -0.5px;
     }
@@ -65,7 +67,7 @@ import { Book } from '../../models/book.model';
     p {
       font-family: var(--font-body);
       color: #64748b;
-      font-size: 0.95rem; /* Further reduced from 1rem */
+      font-size: 0.875rem; /* Reduced from 0.95rem */
       font-weight: 300;
       letter-spacing: 0.5px;
       margin: 0;
@@ -74,21 +76,21 @@ import { Book } from '../../models/book.model';
     .grid-layout {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: 1rem; /* Further reduced gap */
-      max-width: 800px; /* Further reduced from 900px */
-      margin: 0 auto 1rem auto;
-      flex-grow: 1;
+      gap: 0.75rem; /* Reduced from 1rem */
+      max-width: 760px; /* Reduced from 800px */
+      margin: 0.75rem 0;
       overflow: hidden;
       align-content: center;
-      padding: 0 1rem;
+      padding: 0.5rem;
       width: 100%;
+      border-radius: 12px;
     }
     
     .actions {
       display: flex;
       justify-content: center;
       margin-top: auto;
-      padding-bottom: 3rem;
+      padding-bottom: 2rem; /* Reduced from 3rem */
       flex-shrink: 0;
     }
     
@@ -96,13 +98,13 @@ import { Book } from '../../models/book.model';
       background: var(--color-royal-blue);
       color: var(--color-gold);
       border: 1px solid var(--color-gold);
-      padding: 1rem 4rem;
+      padding: 0.75rem 2.5rem; /* Significantly reduced from 1rem 4rem */
       font-family: var(--font-body);
-      font-size: 1rem;
+      font-size: 0.9rem; /* Reduced from 1rem */
       text-transform: uppercase;
-      letter-spacing: 2px;
+      letter-spacing: 1.5px;
       font-weight: 700;
-      border-radius: 4px; /* More regal, less playful */
+      border-radius: 4px; 
       cursor: pointer;
       transition: all 0.4s ease;
       box-shadow: 0 4px 15px rgba(0,0,0,0.1);
@@ -124,9 +126,9 @@ import { Book } from '../../models/book.model';
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 400px;
+      height: 300px; /* Reduced from 400px */
       font-family: var(--font-heading);
-      font-size: 1.5rem;
+      font-size: 1.25rem;
       color: #94a3b8;
       font-style: italic;
     }
@@ -138,21 +140,30 @@ export class BookGridComponent implements OnInit {
   isLoading = false;
 
   constructor(
-    private csvService: CsvService,
+    private bookService: BookService,
     private recommendationService: RecommendationService,
     private googleBooksService: GoogleBooksService
   ) { }
 
   ngOnInit(): void {
+    this.loadBooks();
+  }
+
+  loadBooks() {
     this.isLoading = true;
-    this.csvService.getBooks().subscribe({
+    this.bookService.getBooks().subscribe({
       next: (books) => {
         this.allBooks = books;
-        this.recommendNewBooks();
+        // If we have no books (e.g. first run with empty DB), we might want to seed or just show empty
+        if (this.allBooks.length > 0) {
+          this.recommendNewBooks();
+        } else {
+          this.currentRecommendations = [];
+        }
         this.isLoading = false;
       },
       error: (err) => {
-        console.error('Failed to load CSV', err);
+        console.error('Failed to load books', err);
         this.isLoading = false;
       }
     });
@@ -178,5 +189,25 @@ export class BookGridComponent implements OnInit {
 
   trackByBookId(index: number, book: Book): string {
     return book.id;
+  }
+
+  onDeleteBook(id: string) {
+    this.bookService.deleteBook(id).subscribe({
+      next: () => {
+        // Remove from local array to update UI immediately
+        this.allBooks = this.allBooks.filter(b => b.id !== id);
+        this.currentRecommendations = this.currentRecommendations.filter(b => b.id !== id);
+
+        // If we deleted a displayed book, we might want to fill the spot or just leave it
+        if (this.currentRecommendations.length < 4 && this.allBooks.length >= 4) {
+          // Fill the gap
+          this.recommendNewBooks();
+        }
+      },
+      error: (err) => {
+        console.error('Failed to delete book', err);
+        alert('Failed to delete book');
+      }
+    });
   }
 }

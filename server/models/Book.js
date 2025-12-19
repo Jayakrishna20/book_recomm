@@ -14,6 +14,9 @@ const bookSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    thumbnailUrl: {
+      type: String,
+    },
     // Optional field to store CSV ID if needed
     externalId: {
       type: String,

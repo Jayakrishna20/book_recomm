@@ -116,3 +116,26 @@
   color: var(--primary-color, #6200ee);
   font-weight: bold;
 }
+
+.add-btn {
+  background: var(--color-royal-blue, #0a192f);
+  color: var(--color-gold, #d4af37);
+  border: 1px solid var(--color-gold, #d4af37);
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 1.2rem;
+  line-height: 1;
+  margin-left: 10px;
+  transition: all 0.2s;
+}
+
+.add-btn:hover {
+  background: var(--color-gold, #d4af37);
+  color: var(--color-royal-blue, #0a192f);
+  transform: scale(1.1);
+}
